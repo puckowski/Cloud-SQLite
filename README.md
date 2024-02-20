@@ -1,6 +1,6 @@
 # Sling.js Cloud SQLite
 
-![Sling.js Cloud SQLite](https://github.com/puckowski/Tryit-Code-Editor/blob/master/images/Sling.js_Tryit_Code_Editor_34.PNG "Sling.js Cloud SQLite")
+![Sling.js Cloud SQLite](https://github.com/puckowski/Cloud-SQLite/blob/master/images/Sling.js%20Cloud%20SQlite%20Editor.png?raw=true "Sling.js Cloud SQLite")
 
 This is an in-browser SQLite database editor built using the Sling.js framework.
 
