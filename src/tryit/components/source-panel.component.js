@@ -201,7 +201,7 @@ class SourcePanelComponent {
         let font = ' font: 400 13.3333px Arial;';
 
         if (state.getLowResolution()) {
-            font = ' font: 400 26px Arial;';
+            font = ' font: 400 20px Arial;';
         }
 
         font += ' filter: brightness(190%);'

@@ -23,7 +23,7 @@ class HelpComponent {
         let font = ' font: 400 13.3333px Arial;';
 
         if (state.getLowResolution()) {
-            font = ' font: 400 26px Arial;';
+            font = ' font: 400 20px Arial;';
         }
         
         const isLowResolution = state.getLowResolution();
@@ -53,7 +53,7 @@ class HelpComponent {
                         }),
                         markup('p', {
                             children: [
-                                textNode('Click Export to export all SQLite database tables and content.')
+                                textNode('Click Export to export all SQLite database table, views, and table content.')
                             ]
                         }),
                         markup('p', {

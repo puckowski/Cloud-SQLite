@@ -683,7 +683,7 @@ export class WordSuggestionComponent {
                         let font = '400 13.3333px Arial';
 
                         if (state.getLowResolution()) {
-                            font = '400 26px Arial';
+                            font = '400 20px Arial';
                         }
 
                         const textWidth = this.getTextWidth(this.suggestion, font);
@@ -880,7 +880,7 @@ export class WordSuggestionComponent {
         let font = ' font: 400 13.3333px Arial;';
 
         if (state.getLowResolution()) {
-            font = ' font: 400 26px Arial;';
+            font = ' font: 400 20px Arial;';
         }
 
         let leftAndTopAndDisplay = 'left: ' + this.x + 'px; top: ' + this.y + 'px;';

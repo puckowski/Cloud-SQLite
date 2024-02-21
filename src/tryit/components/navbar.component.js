@@ -6,7 +6,7 @@ class NavbarComponent {
     constructor() {
         this.fileService = new FileService();
         this.NAVBAR_VH_TARGET = 40;
-        this.NAVBAR_PIXEL_HEIGHT_MAX = 240;
+        this.NAVBAR_PIXEL_HEIGHT_MAX = 160;
     }
 
     slAfterInit() {
@@ -66,7 +66,7 @@ class NavbarComponent {
 
         const state = getState();
         state.getClearResultsSubject().next(true);
-        
+
         detectChanges();
     }
 
@@ -140,12 +140,12 @@ class NavbarComponent {
         let headerAlign = '';
 
         if (lowResolution) {
-            font = ' font: 400 26px Arial;';
-            padding = ' padding: 2px 12px;';
-            marginBottom = ' margin-bottom: 0.75rem;';
-            marginRight = ' margin-right: 0.75rem;';
-            headerPadding = ' padding: 1rem 0.5rem 0.25rem 0.5rem;';
-            headerMargin = ' margin-top: -0.75rem;';
+            font = ' font: 400 20px Arial;';
+            padding = ' padding: 1.5px 8px;';
+            marginBottom = ' margin-bottom: 0.5rem;';
+            marginRight = ' margin-right: 0.5rem;';
+            headerPadding = ' padding: 0.5rem 0.5rem 0.25rem 0.5rem;';
+            headerMargin = ' margin-top: -0.5rem;';
             headerAlign = ' align-items: center; ';
         }
 
@@ -159,7 +159,7 @@ class NavbarComponent {
             }
 
             headerAlign += ' min-height: ' + fourtyVhOrMax + 'px; ';
-            padding = ' padding: 12px 12px;';
+            padding = ' padding: 8px 8px;';
         }
 
         font += ' font-weight: 900;';

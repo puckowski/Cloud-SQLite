@@ -41,7 +41,7 @@ export class ResetDialogComponent {
         let font = ' font: 400 13.3333px Arial;';
 
         if (state.getLowResolution()) {
-            font = ' font: 400 26px Arial;';
+            font = ' font: 400 20px Arial;';
         }
 
         this.showToast('Code Editor reset.', font);
@@ -65,7 +65,7 @@ export class ResetDialogComponent {
         let font = ' font: 400 13.3333px Arial;';
 
         if (state.getLowResolution()) {
-            font = ' font: 400 26px Arial;';
+            font = ' font: 400 20px Arial;';
         }
 
         return markup('dialog', {
