@@ -51,7 +51,10 @@ class PreviewComponent {
                 this.printResult(priorResult, htmlContainer);
             }
             this.printResult(data, htmlContainer);
-            this.resultHistory.push(data);
+
+            if (!data.expot) {
+                this.resultHistory.push(data);
+            }
 
             if ((data && data !== '') || this.resultHistory.length > 0) {
                 if (this.waterCss === null) {
@@ -89,6 +92,10 @@ class PreviewComponent {
         this.onExportSqlFunction = () => {
             this.sqlWorker.postMessage({ export: true });
         };
+        this.onClearResults = () => {
+            this.resultHistory = [];
+            detectChanges();
+        };
     }
 
     slAfterInit() {
@@ -110,6 +117,10 @@ class PreviewComponent {
             exportSqlSubject.subscribe(this.onExportSqlFunction);
         }
 
+        const clearResultsSubject = state.getClearResultsSubject();
+        if (!clearResultsSubject.getHasSubscription(this.onClearResults)) {
+            clearResultsSubject.subscribe(this.onClearResults);
+        }
         this.resultHistory = [];
     }
 
@@ -128,6 +139,11 @@ class PreviewComponent {
         const exportSqlSubject = state.getExportSqlSubject();
         if (exportSqlSubject.getHasSubscription(this.onExportSqlFunction)) {
             exportSqlSubject.clearSubscription(this.onExportSqlFunction);
+        }
+
+        const clearResultsSubject = state.getClearResultsSubject();
+        if (clearResultsSubject.getHasSubscription(this.onClearResults)) {
+            clearResultsSubject.clearSubscription(this.onClearResults);
         }
     }
 
@@ -155,6 +171,15 @@ class PreviewComponent {
         } else if (result.export) {
             this.exportService.downloadFile('sqlite.sql', result.export);
             isExport = true;
+        } else if (result.ready) {
+            htmlContainer.document.write(result.ready ? result.ready : result);
+            htmlContainer.document.write('<hr>');
+            logPrinted = true;
+
+            const state = getState();
+            state.getSqliteReadySubject().next(true);
+
+            detectChanges();
         }
 
         try {
@@ -252,7 +277,7 @@ class PreviewComponent {
                         style: 'margin: 0px; flex-shrink: 1;'
                     },
                     children: [
-                        ...(!this.isPreviewLoading ? textNode('Preview') : []),
+                        ...(!this.isPreviewLoading ? textNode('Results') : []),
                         ...(this.isPreviewLoading ? textNode('Loading...') : [])
                     ]
                 }),

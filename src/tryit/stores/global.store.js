@@ -10,7 +10,7 @@ class StoreGlobal {
         this.inlineHeight = '';
         this.collapsedMode = false;
         this.showPreview = false;
-        this.version = '0.1';
+        this.version = '0.2';
         this.showHelp = false;
         this.sourceHasNewInput = BehaviorSubject(false);
         this.invalidScriptIndices = BehaviorSubject([]);
@@ -25,6 +25,20 @@ class StoreGlobal {
         this.lowResolutionObject = 'lowresolution';
         this.initializeLowResolution();
         this.exportSqlSubject = BehaviorSubject(false);
+        this.sqliteReadySubject = BehaviorSubject(false);
+        this.clearResultsSubject = BehaviorSubject(false);
+    }
+
+    getClearResultsSubject() {
+        return this.clearResultsSubject;
+    }
+
+    getSqliteReadySubject() {
+        return this.sqliteReadySubject;
+    }
+
+    getSqliteReady() {
+        return this.sqliteReadySubject.getData();
     }
 
     getExportSqlSubject() {

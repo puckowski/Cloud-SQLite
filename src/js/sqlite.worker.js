@@ -17,7 +17,7 @@ globalThis.sqlite3InitModule().then(function (readySqlite3) {
     sqlite3 = readySqlite3;
     oo = sqlite3.oo1;
     db = new oo.DB("/mydb.sqlite3", 'ct');
-    postMessage({ log: 'SQLite ready' });
+    postMessage({ ready: 'SQLite ready' });
 });
 
 self.onmessage = (message) => {
@@ -106,12 +106,25 @@ self.onmessage = (message) => {
                 }
             }
 
-            if (insertSql.endsWith('VALUES ')) {
-                postMessage({ export: exportSql });
-            } else {
-                postMessage({ export: exportSql + insertSql + ';' });
+            if (!insertSql.endsWith(' VALUES\n')) {
+                exportSql += insertSql + ';\n\n';
             }
+
+            insertSql = '';
         }
+
+        let viewRows = [];
+        db.exec({
+            sql: 'SELECT * FROM sqlite_master WHERE type = \'view\';',
+            rowMode: 'object',
+            resultRows: viewRows
+        });
+
+        for (let index = 0; index < viewRows.length; ++index) {
+            exportSql += viewRows[index].sql + ';\n\n';
+        }
+
+        postMessage({ export: exportSql });
     } else {
         const sql = message.data.sql;
 

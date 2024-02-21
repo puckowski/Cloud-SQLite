@@ -64,6 +64,9 @@ class NavbarComponent {
         htmlContainer.document.open();
         htmlContainer.document.close();
 
+        const state = getState();
+        state.getClearResultsSubject().next(true);
+        
         detectChanges();
     }
 
@@ -126,6 +129,7 @@ class NavbarComponent {
         const versionStr = state.getVersion();
         const portraitMode = state.getPortraitMode();
         const lowResolution = state.getLowResolution();
+        const sqliteReady = state.getSqliteReady();
 
         let font = ' font: 400 13.3333px Arial;';
         let padding = ' padding: 1px 6px;';
@@ -208,15 +212,6 @@ class NavbarComponent {
                         ]
                     })
                 ] : []),
-                markup('button', {
-                    attrs: {
-                        onclick: this.onRun.bind(this),
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                    },
-                    children: [
-                        textNode('Run')
-                    ]
-                }),
                 ...(collapsedMode === true ? [
                     markup('button', {
                         attrs: {
@@ -228,15 +223,6 @@ class NavbarComponent {
                         ]
                     })
                 ] : []),
-                markup('button', {
-                    attrs: {
-                        onclick: this.onExport.bind(this),
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                    },
-                    children: [
-                        textNode('Export')
-                    ]
-                }),
                 markup('button', {
                     attrs: {
                         onclick: this.onHelpToggle.bind(this),
@@ -265,7 +251,27 @@ class NavbarComponent {
                     children: [
                         textNode('Toggle Mode')
                     ]
-                })
+                }),
+                ...(sqliteReady ? [
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onRun.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Run')
+                        ]
+                    }),
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onExport.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Export')
+                        ]
+                    })
+                ] : []),
             ]
         });
     }

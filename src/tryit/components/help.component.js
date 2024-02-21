@@ -35,7 +35,7 @@ class HelpComponent {
             children: [
                 markup('div', {
                     attrs: {
-                        style: 'flex: 20;'
+                        style: 'flex: 20; padding: 1rem;'
                     },
                     children: [
                         markup('h4', {
@@ -44,6 +44,11 @@ class HelpComponent {
                             },
                             children: [
                                 textNode('Cloud SQLite Help')
+                            ]
+                        }),
+                        markup('p', {
+                            children: [
+                                textNode('SQLite databases are temporary and are destroyed on browser tab refresh.')
                             ]
                         }),
                         markup('p', {
@@ -92,10 +97,10 @@ class HelpComponent {
                                 textNode('If you encounter any issues, please log an issue on GitHub: '),
                                 markup('a', {
                                     attrs: {
-                                        href: 'https://github.com/puckowski/Tryit-Code-Editor'
+                                        href: 'https://github.com/puckowski/Cloud-SQLite'
                                     },
                                     children: [
-                                        textNode('https://github.com/puckowski/Tryit-Code-Editor')
+                                        textNode('https://github.com/puckowski/Cloud-SQLite')
                                     ]
                                 })
                             ]
