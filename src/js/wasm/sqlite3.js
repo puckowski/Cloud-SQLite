@@ -7827,10 +7827,6 @@ globalThis.sqlite3ApiBootstrap.initializers.push(function(sqlite3){
   };
   const __dbTraceToConsole =
         wasm.installFunction('i(ippp)', function(t,c,p,x){
-          if(capi.SQLITE_TRACE_STMT===t){
-            console.log("SQL TRACE #"+(++this.counter)+' via sqlite3@'+c+':',
-                        wasm.cstrToJs(x));
-          }
         }.bind({counter: 0}));
   const __vfsPostOpenSql = Object.create(null);
   const dbCtorHelper = function ctor(...args){
