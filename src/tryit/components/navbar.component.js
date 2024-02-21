@@ -52,6 +52,14 @@ class NavbarComponent {
         setState(state);
     }
 
+    onDemo() {
+        this.fileService.buildDemo();
+        const state = getState();
+        s.DETACHED_SET_TIMEOUT(() => {
+            state.getDataSubject().next(true);
+        }, 0);
+    }
+
     onRun() {
         const state = getState();
         state.getDataSubject().next(true);
@@ -250,6 +258,15 @@ class NavbarComponent {
                     },
                     children: [
                         textNode('Toggle Mode')
+                    ]
+                }),
+                markup('button', {
+                    attrs: {
+                        onclick: this.onDemo.bind(this),
+                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                    },
+                    children: [
+                        textNode('Demo')
                     ]
                 }),
                 ...(sqliteReady ? [

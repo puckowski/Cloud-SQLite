@@ -3,130 +3,26 @@ import { getState } from "../../../dist/sling.min";
 class FileService {
 
     constructor() {
-        this.SLING_DEMO_HTML =
-            '<html>\n' +
-            '<body>\n' +
-            '    <div id="divRouterOutlet"></div>\n' +
-            '</body>\n' +
-            '</html>';
-
-        this.SLING_DEMO_CSS =
-            '.visible {\n' +
-            '    animation: fadein 800ms ease-in-out;\n' +
-            '}\n\n' +
-            '.hide {\n' +
-            '    animation: fadeout 800ms ease-in-out;\n' +
-            '}\n\n' +
-            '@keyframes fadein {\n' +
-            '    from {\n' +
-            '        opacity: 0;\n' +
-            '        transform: translateY(-3%);\n' +
-            '    }\n\n' +
-            '    to {\n' +
-            '        opacity: 1;\n' +
-            '        transform: translateY(0%);\n' +
-            '    }\n' +
-            '}\n\n' +
-            '@keyframes fadeout {\n' +
-            '    from {\n' +
-            '        opacity: 1;\n' +
-            '        transform: translateY(0%);\n' +
-            '    }\n\n' +
-            '    to {\n' +
-            '        opacity: 0;\n' +
-            '        transform: translateY(3%);\n' +
-            '    }\n' +
-            '}';
-
-        this.SLING_DEMO_JAVASCRIPT =
-            'import {\n' +
-            '    textNode,\n' +
-            '    markup,\n' +
-            '    addRoute,\n' +
-            '    route\n' +
-            '} from "https://cdn.jsdelivr.net/npm/slingjs@19.0.1/sling.min.js";\n' +
-            '\n' +
-            'class HideComponent {\n' +
-            '    hideWelcome() {\n' +
-            '        route("show");\n' +
-            '    }\n' +
-            '\n' +
-            '    slDetachedOnNodeDestroy(node) {\n' +
-            '        return node;\n' +
-            '    }\n' +
-            '\n' +
-            '    view() {\n' +
-            '        return markup("div", {\n' +
-            '            attrs: {\n' +
-            '                id: "divRouterOutlet",\n' +
-            '                class: "visible",\n' +
-            '                style: "display: flex; justify-content: center; align-items: center; height: 100%;",\n' +
-            '                slanimatedestroy: "hide",\n' +
-            '                slanimatedestroytarget: this.slDetachedOnNodeDestroy.bind(this)\n' +
-            '            },\n' +
-            '            children: [\n' +
-            '                markup("h1", {\n' +
-            '                    children: [\n' +
-            '                        textNode("Hello, world!"),\n' +
-            '                        markup("button", {\n' +
-            '                            attrs: {\n' +
-            '                                onclick: this.hideWelcome.bind(this)\n' +
-            '                            },\n' +
-            '                            children: [textNode("Hide")]\n' +
-            '                        })\n' +
-            '                    ]\n' +
-            '                })\n' +
-            '            ]\n' +
-            '        });\n' +
-            '    }\n' +
-            '}\n' +
-            '\n' +
-            'class ShowComponent {\n' +
-            '    hideWelcome() {\n' +
-            '        route("hide");\n' +
-            '    }\n' +
-            '\n' +
-            '    slDetachedOnNodeDestroy(node) {\n' +
-            '        return node;\n' +
-            '    }\n' +
-            '\n' +
-            '    view() {\n' +
-            '        return markup("div", {\n' +
-            '            attrs: {\n' +
-            '                id: "divRouterOutlet",\n' +
-            '                class: "visible",\n' +
-            '                style: "display: flex; justify-content: center; align-items: center; height: 100%;",\n' +
-            '                slanimatedestroy: "hide",\n' +
-            '                slanimatedestroytarget: this.slDetachedOnNodeDestroy.bind(this)\n' +
-            '            },\n' +
-            '            children: [\n' +
-            '                markup("h1", {\n' +
-            '                    children: [\n' +
-            '                        markup("button", {\n' +
-            '                            attrs: {\n' +
-            '                                onclick: this.hideWelcome.bind(this)\n' +
-            '                            },\n' +
-            '                            children: [textNode("Show")]\n' +
-            '                        })\n' +
-            '                    ]\n' +
-            '                })\n' +
-            '            ]\n' +
-            '        });\n' +
-            '    }\n' +
-            '}\n' +
-            '\n' +
-            'addRoute("hide", {\n' +
-            '    component: new HideComponent(),\n' +
-            '    root: "divRouterOutlet",\n' +
-            '    animateDestroy: true\n' +
-            '});\n' +
-            'addRoute("show", {\n' +
-            '    component: new ShowComponent(),\n' +
-            '    root: "divRouterOutlet",\n' +
-            '    animateDestroy: true\n' +
-            '});\n' +
-            '\n' +
-            'route("hide");';
+        this.CLOUD_SQLITE_SAMPLE = 
+        'CREATE TABLE IF NOT EXISTS users (\n' +
+        '    user_id INTEGER PRIMARY KEY,\n' +
+        '    username TEXT NOT NULL,\n' +
+        '    email TEXT NOT NULL UNIQUE,\n' +
+        '    password TEXT NOT NULL\n' +
+        ');\n' +
+        '\n' +
+        'INSERT OR IGNORE INTO users (user_id, username, email, password) VALUES (1, \'bob\', \'bob@example.com\', \'qwerty\');\n' +
+        'INSERT OR IGNORE INTO users (user_id, username, email, password) VALUES (2, \'frank\', \'frank@example.com\', \'123456\');\n' +
+        '\n' +
+        'SELECT * FROM users;\n' +
+        '\n' +
+        'CREATE VIEW IF NOT EXISTS active_users AS\n' +
+        'SELECT user_id, username, email FROM users WHERE password <> \'\';\n' +
+        '\n' +
+        'CREATE TABLE IF NOT EXISTS addresses (\n' +
+        '    line1 TEXT NOT NULL,\n' +
+        '    line2 TEXT NULL\n' +
+        ');\n';
 
         this.fileListObject = 'filelist';
         this.initializeFileList();
@@ -134,16 +30,13 @@ class FileService {
         this.modeParam = 'mode';
     }
 
-    buildSlingDemo() {
-        const fileList = this.getFileList();
-        const length = fileList.length;
-        this.addFile(this.SLING_DEMO_HTML, false, false);
-        this.setFileName(length, 'Sling Demo HTML');
-        this.addFile(this.SLING_DEMO_CSS, false, true);
-        this.setFileName(length + 1, 'Sling Demo CSS');
-        this.addFile(this.SLING_DEMO_JAVASCRIPT, true, false);
-        this.setFileName(length + 2, 'Sling Demo JavaScript');
-        return length;
+    buildDemo() {
+        let fileData = this.getFileData(0);
+        if (fileData === '\n') {
+            fileData = '';
+        }
+        fileData += this.CLOUD_SQLITE_SAMPLE;
+        this.updateFileData(0, fileData);
     }
 
     getFile(index) {
