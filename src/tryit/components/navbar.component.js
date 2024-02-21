@@ -7,6 +7,7 @@ class NavbarComponent {
         this.fileService = new FileService();
         this.NAVBAR_VH_TARGET = 40;
         this.NAVBAR_PIXEL_HEIGHT_MAX = 160;
+        this.sqlFormatter = null;
     }
 
     slAfterInit() {
@@ -128,6 +129,33 @@ class NavbarComponent {
 
         setState(state);
         detectChanges();
+    }
+
+    onFormat() {
+        const state = getState();
+        const fileIndex = state.getEditIndex();
+        let code = this.fileService.getFileData(fileIndex);
+
+        if (this.sqlFormatter === null) {
+            import(
+                '../../js/sql-formatter'
+            ).then((module) => {
+                this.sqlFormatter = module.format;
+                code = this.sqlFormatter(code, { language: 'sqlite' });
+
+                this.fileService.updateFileData(fileIndex, code);
+
+                const sub = state.getDataSubject();
+                sub.next(true);
+            });
+        } else {
+            code = this.sqlFormatter(code, { language: 'sqlite' });
+
+            this.fileService.updateFileData(fileIndex, code);
+
+            const sub = state.getDataSubject();
+            sub.next(true);
+        }
     }
 
     view() {
@@ -267,6 +295,15 @@ class NavbarComponent {
                     },
                     children: [
                         textNode('Demo')
+                    ]
+                }),
+                markup('button', {
+                    attrs: {
+                        onclick: this.onFormat.bind(this),
+                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                    },
+                    children: [
+                        textNode('Format')
                     ]
                 }),
                 ...(sqliteReady ? [
