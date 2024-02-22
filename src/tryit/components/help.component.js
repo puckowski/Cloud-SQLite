@@ -58,6 +58,11 @@ class HelpComponent {
                         }),
                         markup('p', {
                             children: [
+                                textNode('Press Control/Command and J simultaneously to format your code. Press Control/Command and M simultaneously to run your code.')
+                            ]
+                        }),
+                        markup('p', {
+                            children: [
                                 textNode('To reset Cloud SQLite to original state, click the following button.'),
                             ]
                         }),
