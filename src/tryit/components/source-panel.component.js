@@ -68,10 +68,6 @@ class SourcePanelComponent {
         }
     }
 
-    slOnDestroy() {
-        console.log('hi');
-    }
-
     setCurrentCursorPosition(charOffset) {
         if (charOffset >= 0) {
             const el = document.getElementById('tryit-sling-div');
