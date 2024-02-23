@@ -10,10 +10,9 @@ class StoreGlobal {
         this.inlineHeight = '';
         this.collapsedMode = false;
         this.showPreview = false;
-        this.version = '1.0';
+        this.version = '1.1';
         this.showHelp = false;
         this.sourceHasNewInput = BehaviorSubject(false);
-        this.invalidScriptIndices = BehaviorSubject([]);
         this.hasHighlighted = BehaviorSubject(false);
         this.caretPositionToRestore = 0;
         this.preserveFocus = false;
@@ -94,10 +93,6 @@ class StoreGlobal {
 
     setCaretPositionToRestore(position) {
         this.caretPositionToRestore = position;
-    }
-
-    getInvalidScriptIndexSubject() {
-        return this.invalidScriptIndices;
     }
 
     getShowHelp() {

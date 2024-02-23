@@ -43,7 +43,7 @@ class ScreenService {
             state.setPortraitMode(false);
         }
 
-        s.DETACHED_SET_TIMEOUT(() => {
+        setTimeout(() => {
             state.getDataSubject().next(true);
         }, 0);
 

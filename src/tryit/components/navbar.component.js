@@ -53,37 +53,60 @@ class NavbarComponent {
         const state = getState();
         state.setShowPreview(!state.getShowPreview());
 
-        s.DETACHED_SET_TIMEOUT(() => {
+        setTimeout(() => {
             state.getDataSubject().next(true);
         }, 0);
 
         setState(state);
     }
 
+    onImport(event) {
+        if (event && event.target && event.target.files) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                reader.onload = (readEvent) => {
+                    const state = getState();
+                    this.fileService.updateFileData(0, this.fileService.getFileData(0) + '\n' + readEvent.target.result);
+                    state.getDataSubject().next(true);
+                };
+            }
+        }
+
+        if (event && event.target) {
+            event.target.value = '';
+        }
+    }
+
     onDemo() {
         this.fileService.buildDemo();
         const state = getState();
-        s.DETACHED_SET_TIMEOUT(() => {
+        setTimeout(() => {
             state.getDataSubject().next(true);
         }, 0);
     }
 
     onRun() {
         const state = getState();
-        state.getDataSubject().next(true);
+        state.getDataSubject().next({ run: true });
     }
 
     onClearResults() {
         const iframe = document.getElementById('tryit-sling-iframe');
-        const htmlContainer = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
 
-        htmlContainer.document.open();
-        htmlContainer.document.close();
+        if (iframe) {
+            const htmlContainer = (iframe.contentWindow) ? iframe.contentWindow : (iframe.contentDocument.document) ? iframe.contentDocument.document : iframe.contentDocument;
 
-        const state = getState();
-        state.getClearResultsSubject().next(true);
+            htmlContainer.document.open();
+            htmlContainer.document.close();
 
-        detectChanges();
+            const state = getState();
+            state.getClearResultsSubject().next(true);
+
+            detectChanges();
+        }
     }
 
     onExport() {
@@ -111,7 +134,7 @@ class NavbarComponent {
         setState(state);
 
         if (!state.getShowHelp()) {
-            s.DETACHED_SET_TIMEOUT(() => {
+            setTimeout(() => {
                 state.getDataSubject().next(true);
             }, 0);
         }
@@ -130,7 +153,7 @@ class NavbarComponent {
             state.setCollapsedMode(true);
         }
 
-        s.DETACHED_SET_TIMEOUT(() => {
+        setTimeout(() => {
             state.getDataSubject().next(true);
         }, 0);
 
@@ -185,10 +208,10 @@ class NavbarComponent {
         if (lowResolution) {
             font = ' font: 400 20px Arial;';
             padding = ' padding: 1.5px 8px;';
-            marginBottom = ' margin-bottom: 0.5rem;';
-            marginRight = ' margin-right: 0.5rem;';
+            marginBottom = ' margin-bottom: 0.75rem;';
+            marginRight = ' margin-right: 0.75rem;';
             headerPadding = ' padding: 0.5rem 0.5rem 0.25rem 0.5rem;';
-            headerMargin = ' margin-top: -0.5rem;';
+            headerMargin = ' margin-top: -0.75rem;';
             headerAlign = ' align-items: center; ';
         }
 
@@ -312,6 +335,24 @@ class NavbarComponent {
                     children: [
                         textNode('Format')
                     ]
+                }),
+                markup('label', {
+                    attrs: {
+                        id: 'try-sling-import-label',
+                        for: 'tryit-sling-import',
+                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); display: flex; align-items: center; ' + marginRight + '  ' + font + padding,
+                    },
+                    children: [
+                        textNode('Import File')
+                    ]
+                }),
+                markup('input', {
+                    attrs: {
+                        onchange: this.onImport.bind(this),
+                        id: 'tryit-sling-import',
+                        type: 'file',
+                        style: 'display: none;'
+                    }
                 }),
                 ...(sqliteReady ? [
                     markup('button', {

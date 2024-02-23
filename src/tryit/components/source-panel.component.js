@@ -22,7 +22,7 @@ class SourcePanelComponent {
                 this.debouncedFileChangeFunction = this.debounce(this.onFileChangeFunction, this.STANDARD_DELAY_MILLISECONDS);
                 sub.subscribe(this.debouncedFileChangeFunction);
             }
-
+            
             if (state.getPreserveFocus()) {
                 state.setPreserveFocus(false);
                 setState(state);
@@ -30,7 +30,7 @@ class SourcePanelComponent {
                 const textAreaEle = document.getElementById('tryit-sling-div');
 
                 if (textAreaEle) {
-                    s.DETACHED_SET_TIMEOUT(() => {
+                    setTimeout(() => {
                         state = getState();
 
                         const collapsedMode = state.getCollapsedMode();
@@ -65,6 +65,10 @@ class SourcePanelComponent {
             sub.subscribe(this.debouncedFileChangeFunction);
             sub.next(true);
         }
+    }
+
+    slOnDestroy() {
+        console.log('hi');
     }
 
     setCurrentCursorPosition(charOffset) {

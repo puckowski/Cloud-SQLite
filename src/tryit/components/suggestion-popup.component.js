@@ -553,7 +553,7 @@ export class WordSuggestionComponent {
             dismissSubject.subscribe(this.onSuggestionDismiss);
         }
 
-        s.DETACHED_SET_INTERVAL(() => {
+        setInterval(() => {
             if (this.newInput) {
                 const textAreaEle = document.getElementById('tryit-sling-div');
                 const selectionEnd = getCaretPosition(textAreaEle);
