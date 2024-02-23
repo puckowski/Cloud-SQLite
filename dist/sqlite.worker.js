@@ -20,6 +20,10 @@ globalThis.sqlite3InitModule().then(function (readySqlite3) {
     postMessage({ ready: 'SQLite ready' });
 });
 
+function uint8ArrayToHex(uint8Array) {
+    return Array.from(uint8Array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
 self.onmessage = (message) => {
     const exportMode = message.data.export;
 
@@ -51,7 +55,7 @@ self.onmessage = (message) => {
                 }
 
                 insertSql += resultColumns[nameIndex].name;
-                typeMap.set(resultColumns[nameIndex].name, resultColumns[nameIndex].type);
+                typeMap.set(resultColumns[nameIndex].name, resultColumns[nameIndex].type.toUpperCase());
             }
             insertSql += ') VALUES\n';
             let countRows = [];
@@ -96,6 +100,11 @@ self.onmessage = (message) => {
                                 data = data.replace(/'/g, '\'\'');
 
                                 insertSql += '\'' + data + '\'';
+                            } else if (typeMap.get(resultColumns[nameIndex].name) === 'BLOB') {
+                                const blobData = tableRows[rowIndex][resultColumns[nameIndex].name];
+                                const hexString = uint8ArrayToHex(blobData);
+                                
+                                insertSql += 'X\'' + hexString + '\'';
                             } else {
                                 insertSql += tableRows[rowIndex][resultColumns[nameIndex].name];
                             }

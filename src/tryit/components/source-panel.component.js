@@ -1,4 +1,4 @@
-import { getState, markup, setState, textNode } from '../../../dist/sling.min';
+import { detectChanges, getState, markup, setState, textNode } from '../../../dist/sling.min';
 import FileService from '../services/file.service';
 import WordSuggestionComponent from './suggestion-popup.component';
 import { getCaretPosition } from '../services/caret.service';
@@ -30,7 +30,7 @@ class SourcePanelComponent {
                 const textAreaEle = document.getElementById('tryit-sling-div');
 
                 if (textAreaEle) {
-                    s.DETACHED_SET_TIMEOUT(() => {
+                    setTimeout(() => {
                         state = getState();
 
                         const collapsedMode = state.getCollapsedMode();
@@ -50,6 +50,7 @@ class SourcePanelComponent {
 
                         const caretRestore = state.getCaretPositionToRestore();
                         this.setCurrentCursorPosition(caretRestore);
+                        detectChanges();
                     }, 100);
                 }
             }
@@ -121,38 +122,37 @@ class SourcePanelComponent {
     }
 
     highlightCode() {
-        setTimeout(() => {
-            const state = getState();
+        const state = getState();
 
-            const collapsedMode = state.getCollapsedMode();
-            const showPreview = state.getShowPreview();
+        const collapsedMode = state.getCollapsedMode();
+        const showPreview = state.getShowPreview();
 
-            if (collapsedMode && showPreview) {
-                return;
-            }
+        if (collapsedMode && showPreview) {
+            return;
+        }
 
-            const fileIndex = state.getEditIndex();
-            let code = this.fileService.getFileData(fileIndex);
-            const textAreaEle = document.getElementById('tryit-sling-div');
-            textAreaEle.textContent = code;
+        const fileIndex = state.getEditIndex();
+        let code = this.fileService.getFileData(fileIndex);
+        const textAreaEle = document.getElementById('tryit-sling-div');
+        textAreaEle.textContent = code;
 
-            if (this.hljs === null) {
-                import(
-                    '../../js/highlight-sql'
-                ).then((module) => {
-                    this.hljs = module;
-                    this.hljs.highlightElement(textAreaEle);
-                });
-            } else {
+        if (this.hljs === null) {
+            import(
+                '../../js/highlight-sql'
+            ).then((module) => {
+                this.hljs = module;
                 this.hljs.highlightElement(textAreaEle);
-            }
+            });
+        } else {
+            this.hljs.highlightElement(textAreaEle);
+        }
 
-            const caretRestore = state.getCaretPositionToRestore();
-            this.setCurrentCursorPosition(caretRestore);
+        const caretRestore = state.getCaretPositionToRestore();
+        this.setCurrentCursorPosition(caretRestore);
 
-            const sub = state.getHasHighlightedSubject();
-            sub.next(true);
-        }, 0);
+        const sub = state.getHasHighlightedSubject();
+        sub.next(true);
+        detectChanges();
     }
 
     onInput(event) {

@@ -3,6 +3,6 @@ export const debounce = (func, wait) => {
     return function (...args) {
         const context = this;
         clearTimeout(timeout);
-        timeout = s.DETACHED_SET_TIMEOUT(() => func.apply(context, args), wait);
+        timeout = setTimeout(() => func.apply(context, args), wait);
     }
 }

@@ -14,7 +14,6 @@ class PreviewComponent {
         this.nessScriptData = null;
         this.STANDARD_DELAY_MILLISECONDS = 300;
         this.debounce = debounce;
-        this.debouncedFileChangeFunction = null;
         this.sqlWorker = new Worker('sqlite.worker.js?sqlite3.dir=wasm');
         this.resultHistory = [];
         this.waterCss = null;
@@ -52,7 +51,7 @@ class PreviewComponent {
             }
             this.printResult(data, htmlContainer);
 
-            if (!data.expot) {
+            if (!data.export) {
                 this.resultHistory.push(data);
             }
 
@@ -78,15 +77,17 @@ class PreviewComponent {
 
             detectChanges();
         };
-        this.onFileChangeFunction = () => {
-            const state = getState();
-            const fileIndex = state.getEditIndex();
-            const sql = this.fileService.getFileData(fileIndex);
+        this.onFileChangeFunction = (nextValue) => {
+            if (nextValue.run) {
+                const state = getState();
+                const fileIndex = state.getEditIndex();
+                const sql = this.fileService.getFileData(fileIndex);
 
-            const sqlQueries = this.splitSql(sql);
+                const sqlQueries = this.splitSql(sql);
 
-            for (const sqlQuery of sqlQueries) {
-                this.sqlWorker.postMessage({ sql: sqlQuery });
+                for (const sqlQuery of sqlQueries) {
+                    this.sqlWorker.postMessage({ sql: sqlQuery });
+                }
             }
         };
         this.onExportSqlFunction = () => {
@@ -96,20 +97,15 @@ class PreviewComponent {
             this.resultHistory = [];
             detectChanges();
         };
+        this.debouncedFileChangeFunction = this.debounce(this.onFileChangeFunction, this.STANDARD_DELAY_MILLISECONDS);
     }
 
     slAfterInit() {
         const state = getState();
         const sub = state.getDataSubject();
-        this.debouncedFileChangeFunction = this.debounce(this.onFileChangeFunction, this.STANDARD_DELAY_MILLISECONDS);
         if (!sub.getHasSubscription(this.debouncedFileChangeFunction)) {
             sub.subscribe(this.debouncedFileChangeFunction);
             sub.next(true);
-        }
-
-        const subInvalid = state.getInvalidScriptIndexSubject();
-        if (!subInvalid.getHasSubscription(this.onInvalidScriptFunction)) {
-            subInvalid.subscribe(this.onInvalidScriptFunction);
         }
 
         const exportSqlSubject = state.getExportSqlSubject();
@@ -129,11 +125,6 @@ class PreviewComponent {
         const sub = state.getDataSubject();
         if (sub.getHasSubscription(this.debouncedFileChangeFunction)) {
             sub.clearSubscription(this.debouncedFileChangeFunction);
-        }
-
-        const subInvalid = state.getInvalidScriptIndexSubject();
-        if (subInvalid.getHasSubscription(this.onInvalidScriptFunction)) {
-            subInvalid.clearSubscription(this.onInvalidScriptFunction);
         }
 
         const exportSqlSubject = state.getExportSqlSubject();
@@ -205,7 +196,23 @@ class PreviewComponent {
                         if (index > 0) {
                             tableHtml += '</td><td>';
                         }
-                        tableHtml += arr[dataIndex][keys[index]];
+                        if (typeof arr[dataIndex][keys[index]] === 'object') {
+                            let count = 0;
+                            for (const [key, value] of Object.entries(arr[dataIndex][keys[index]])) {
+                                if (typeof value === 'number') {
+                                    count++;
+                                }
+                            }
+                            if (Object.keys(arr[dataIndex][keys[index]]).length === count) {
+                                const uint8Array = new Uint8Array(Object.values(arr[dataIndex][keys[index]]));
+                                const plaintext = String.fromCharCode.apply(null, uint8Array);
+                                tableHtml += plaintext;
+                            } else {
+                                tableHtml += arr[dataIndex][keys[index]];
+                            }
+                        } else {
+                            tableHtml += arr[dataIndex][keys[index]];
+                        }
                     }
                     tableHtml += '</td></tr>';
                 }

@@ -63,6 +63,19 @@ class HelpComponent {
                         }),
                         markup('p', {
                             children: [
+                                textNode('The following page contains SQLite documentation: '),
+                                markup('a', {
+                                    attrs: {
+                                        href: 'https://www.sqlite.org/docs.html'
+                                    },
+                                    children: [
+                                        textNode('https://www.sqlite.org/docs.html')
+                                    ]
+                                })
+                            ]
+                        }),
+                        markup('p', {
+                            children: [
                                 textNode('To reset Cloud SQLite to original state, click the following button.'),
                             ]
                         }),
