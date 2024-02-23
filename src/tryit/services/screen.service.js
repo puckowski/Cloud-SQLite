@@ -43,9 +43,7 @@ class ScreenService {
             state.setPortraitMode(false);
         }
 
-        setTimeout(() => {
-            state.getDataSubject().next(true);
-        }, 0);
+        state.getDataSubject().next(true);
 
         setState(state);
         detectChanges();

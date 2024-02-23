@@ -52,12 +52,9 @@ class NavbarComponent {
     togglePreview() {
         const state = getState();
         state.setShowPreview(!state.getShowPreview());
-
-        setTimeout(() => {
-            state.getDataSubject().next(true);
-        }, 0);
-
+        state.getDataSubject().next(true);
         setState(state);
+        detectChanges();
     }
 
     onImport(event) {
@@ -83,9 +80,8 @@ class NavbarComponent {
     onDemo() {
         this.fileService.buildDemo();
         const state = getState();
-        setTimeout(() => {
-            state.getDataSubject().next(true);
-        }, 0);
+        state.getDataSubject().next(true);
+        detectChanges();
     }
 
     onRun() {
@@ -134,9 +130,8 @@ class NavbarComponent {
         setState(state);
 
         if (!state.getShowHelp()) {
-            setTimeout(() => {
-                state.getDataSubject().next(true);
-            }, 0);
+            state.getDataSubject().next(true);
+            detectChanges();
         }
     }
 
@@ -153,9 +148,7 @@ class NavbarComponent {
             state.setCollapsedMode(true);
         }
 
-        setTimeout(() => {
-            state.getDataSubject().next(true);
-        }, 0);
+        state.getDataSubject().next(true);
 
         setState(state);
         detectChanges();
