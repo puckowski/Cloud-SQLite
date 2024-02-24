@@ -103,7 +103,7 @@ self.onmessage = (message) => {
                             } else if (typeMap.get(resultColumns[nameIndex].name) === 'BLOB') {
                                 const blobData = tableRows[rowIndex][resultColumns[nameIndex].name];
                                 const hexString = uint8ArrayToHex(blobData);
-                                
+
                                 insertSql += 'X\'' + hexString + '\'';
                             } else {
                                 insertSql += tableRows[rowIndex][resultColumns[nameIndex].name];
@@ -130,7 +130,49 @@ self.onmessage = (message) => {
         });
 
         for (let index = 0; index < viewRows.length; ++index) {
+            if (viewRows[index].sql === null || viewRows[index].sql === undefined || viewRows[index].sql === '') {
+                continue;
+            }
+
             exportSql += viewRows[index].sql + ';\n\n';
+        }
+
+        let indexRows = [];
+        db.exec({
+            sql: 'SELECT sql FROM sqlite_master WHERE type= \'index\';',
+            rowMode: 'object',
+            resultRows: indexRows
+        });
+
+        if (!exportSql.endsWith('\n\n') && indexRows.length > 0) {
+            exportSql += '\n';
+        }
+
+        for (let index = 0; index < indexRows.length; ++index) {
+            if (indexRows[index].sql === null || indexRows[index].sql === undefined || indexRows[index].sql === '') {
+                continue;
+            }
+
+            exportSql += indexRows[index].sql + ';\n';
+        }
+
+        let triggerRows = [];
+        db.exec({
+            sql: 'SELECT sql FROM sqlite_master WHERE type = \'trigger\';',
+            rowMode: 'object',
+            resultRows: triggerRows
+        });
+
+        if (!exportSql.endsWith('\n\n') && triggerRows.length > 0) {
+            exportSql += '\n';
+        }
+
+        for (let index = 0; index < triggerRows.length; ++index) {
+            if (triggerRows[index].sql === null || triggerRows[index].sql === undefined || triggerRows[index].sql === '') {
+                continue;
+            }
+
+            exportSql += triggerRows[index].sql + ';\n';
         }
 
         postMessage({ export: exportSql });

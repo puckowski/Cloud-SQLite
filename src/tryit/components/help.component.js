@@ -53,7 +53,7 @@ class HelpComponent {
                         }),
                         markup('p', {
                             children: [
-                                textNode('Click Export to export all SQLite database table, views, and table content.')
+                                textNode('Click Export to export all SQLite database table, views, triggers, indexes, and table content.')
                             ]
                         }),
                         markup('p', {

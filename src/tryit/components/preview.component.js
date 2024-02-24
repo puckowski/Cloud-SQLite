@@ -10,8 +10,6 @@ class PreviewComponent {
         this.fileService = new FileService();
         this.injectedList = '';
         this.isPreviewLoading = false;
-        this.lessScriptData = null;
-        this.nessScriptData = null;
         this.STANDARD_DELAY_MILLISECONDS = 300;
         this.debounce = debounce;
         this.sqlWorker = new Worker('sqlite.worker.js?sqlite3.dir=wasm');
@@ -162,7 +160,9 @@ class PreviewComponent {
             htmlContainer.document.write('<hr>');
             logPrinted = true;
         } else if (result.export || result.export === '') {
-            this.exportService.downloadFile('sqlite.sql', result.export);
+            if (result.export !== '') {
+                this.exportService.downloadFile('sqlite.sql', result.export);
+            }
             isExport = true;
         } else if (result.ready) {
             htmlContainer.document.write(result.ready ? result.ready : result);
@@ -258,6 +258,18 @@ class PreviewComponent {
 
         if (currentPart.trim() !== '') {
             parts.push(currentPart.trim());
+        }
+
+        let isBegin = false;
+        for (let index = 0; index < parts.length; ++index) {
+            if (parts[index].toLowerCase().includes('begin')) {
+                isBegin = true;
+            } else if (parts[index].toLowerCase().trim() === 'end' && isBegin) {
+                parts[index - 1] += ';\n ' + parts[index];
+                isBegin = false;
+                parts.splice(index, 1);
+                index--;
+            }
         }
 
         return parts;
