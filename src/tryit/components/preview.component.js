@@ -51,25 +51,27 @@ class PreviewComponent {
             }
             this.printResult(data, htmlContainer);
 
-            if (!data.export) {
+            if (!data.export && data.export !== '') {
                 this.resultHistory.push(data);
             }
 
-            if ((data && data !== '') || this.resultHistory.length > 0) {
-                if (this.waterCss === null) {
-                    slGet('water.css').then(xhrResp => {
-                        this.waterCss = xhrResp.response;
+            if (htmlContainer.document.head) {
+                if ((data && data !== '') || this.resultHistory.length > 0) {
+                    if (this.waterCss === null) {
+                        slGet('water.css').then(xhrResp => {
+                            this.waterCss = xhrResp.response;
 
+                            const style = document.createElement('style');
+                            style.textContent = this.waterCss;
+
+                            htmlContainer.document.head.appendChild(style);
+                        });
+                    } else {
                         const style = document.createElement('style');
                         style.textContent = this.waterCss;
 
                         htmlContainer.document.head.appendChild(style);
-                    });
-                } else {
-                    const style = document.createElement('style');
-                    style.textContent = this.waterCss;
-
-                    htmlContainer.document.head.appendChild(style);
+                    }
                 }
             }
 
@@ -159,7 +161,7 @@ class PreviewComponent {
             htmlContainer.document.write(result.log ? result.log : result);
             htmlContainer.document.write('<hr>');
             logPrinted = true;
-        } else if (result.export) {
+        } else if (result.export || result.export === '') {
             this.exportService.downloadFile('sqlite.sql', result.export);
             isExport = true;
         } else if (result.ready) {

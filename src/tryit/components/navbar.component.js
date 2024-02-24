@@ -66,7 +66,14 @@ class NavbarComponent {
                 reader.readAsText(file, 'UTF-8');
                 reader.onload = (readEvent) => {
                     const state = getState();
-                    this.fileService.updateFileData(0, this.fileService.getFileData(0) + '\n' + readEvent.target.result);
+                    const existingFileData = this.fileService.getFileData(0);
+
+                    if (existingFileData === '' || existingFileData === '\n') {
+                        this.fileService.updateFileData(0, readEvent.target.result);
+                    } else {
+                        this.fileService.updateFileData(0, this.fileService.getFileData(0) + '\n' + readEvent.target.result);
+                    }
+
                     state.getDataSubject().next(true);
                 };
             }
