@@ -554,8 +554,9 @@ export class WordSuggestionComponent {
         }
 
         setInterval(() => {
-            if (this.newInput) {
-                const textAreaEle = document.getElementById('tryit-sling-div');
+            const textAreaEle = document.getElementById('tryit-sling-div');
+
+            if (textAreaEle && this.newInput) {
                 const selectionEnd = getCaretPosition(textAreaEle);
                 if (textAreaEle && selectionEnd >= 16) {
                     this.selectionText = textAreaEle.textContent.slice(selectionEnd - 16, selectionEnd);

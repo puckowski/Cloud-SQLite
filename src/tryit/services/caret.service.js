@@ -25,10 +25,12 @@ export function getCaretCoordinates(element, position, options) {
         const dummySpan = document.createElement("span");
         newRange.insertNode(dummySpan);
 
+        const boundingRect = editableDiv.getBoundingClientRect();
+
         // Get the position of the dummy span
         const caretPosition = {
-            left: dummySpan.offsetLeft + editableDiv.offsetLeft,
-            top: dummySpan.offsetTop + editableDiv.offsetTop,
+            left: dummySpan.offsetLeft + boundingRect.left,
+            top: dummySpan.offsetTop + boundingRect.top,
             height: parseInt(computed['lineHeight'])
         };
 
