@@ -35,11 +35,36 @@ self.onmessage = (message) => {
             rowMode: 'object',
             resultRows: resultRows
         });
+
         const names = [];
         for (let index = 0; index < resultRows.length; ++index) {
             exportSql += resultRows[index].sql + ';\n\n';
             names.push(resultRows[index].tbl_name);
         }
+
+        let triggerRows = [];
+        db.exec({
+            sql: 'SELECT sql FROM sqlite_master WHERE type = \'trigger\';',
+            rowMode: 'object',
+            resultRows: triggerRows
+        });
+
+        if (!exportSql.endsWith('\n\n') && names.length > 0) {
+            exportSql += '\n';
+        }
+
+        for (let index = 0; index < triggerRows.length; ++index) {
+            if (triggerRows[index].sql === null || triggerRows[index].sql === undefined || triggerRows[index].sql === '') {
+                continue;
+            }
+
+            exportSql += triggerRows[index].sql + ';\n';
+        }
+
+        if (!exportSql.endsWith('\n\n') && triggerRows.length > 0) {
+            exportSql += '\n';
+        }
+
         for (let index = 0; index < names.length; ++index) {
             let resultColumns = [];
             db.exec({
@@ -154,25 +179,6 @@ self.onmessage = (message) => {
             }
 
             exportSql += indexRows[index].sql + ';\n';
-        }
-
-        let triggerRows = [];
-        db.exec({
-            sql: 'SELECT sql FROM sqlite_master WHERE type = \'trigger\';',
-            rowMode: 'object',
-            resultRows: triggerRows
-        });
-
-        if (!exportSql.endsWith('\n\n') && triggerRows.length > 0) {
-            exportSql += '\n';
-        }
-
-        for (let index = 0; index < triggerRows.length; ++index) {
-            if (triggerRows[index].sql === null || triggerRows[index].sql === undefined || triggerRows[index].sql === '') {
-                continue;
-            }
-
-            exportSql += triggerRows[index].sql + ';\n';
         }
 
         postMessage({ export: exportSql });

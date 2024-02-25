@@ -265,7 +265,7 @@ class PreviewComponent {
             if (parts[index].toLowerCase().includes('begin')) {
                 isBegin = true;
             } else if (parts[index].toLowerCase().trim() === 'end' && isBegin) {
-                parts[index - 1] += ';\n ' + parts[index];
+                parts[index - 1] += ';\n' + parts[index];
                 isBegin = false;
                 parts.splice(index, 1);
                 index--;
