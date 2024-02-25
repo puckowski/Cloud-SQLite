@@ -6,8 +6,9 @@ class NavbarComponent {
     constructor() {
         this.fileService = new FileService();
         this.NAVBAR_VH_TARGET = 40;
-        this.NAVBAR_PIXEL_HEIGHT_MAX = 160;
+        this.NAVBAR_PIXEL_HEIGHT_MAX = 120;
         this.sqlFormatter = null;
+        this.showMoreControls = false;
     }
 
     slAfterInit() {
@@ -188,6 +189,10 @@ class NavbarComponent {
         }
     }
 
+    onToggleShowMore() {
+        this.showMoreControls = !this.showMoreControls;
+    }
+
     view() {
         const state = getState();
         const mod = state.getHeightModifier();
@@ -258,26 +263,6 @@ class NavbarComponent {
                         })
                     ]
                 }),
-                markup('button', {
-                    attrs: {
-                        onclick: this.expandHeight.bind(this),
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                    },
-                    children: [
-                        textNode('Expand')
-                    ]
-                }),
-                ...(mod > 0 ? [
-                    markup('button', {
-                        attrs: {
-                            onclick: this.shrinkHeight.bind(this),
-                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                        },
-                        children: [
-                            textNode('Shrink')
-                        ]
-                    })
-                ] : []),
                 ...(collapsedMode === true ? [
                     markup('button', {
                         attrs: {
@@ -289,15 +274,6 @@ class NavbarComponent {
                         ]
                     })
                 ] : []),
-                markup('button', {
-                    attrs: {
-                        onclick: this.onHelpToggle.bind(this),
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                    },
-                    children: [
-                        textNode('Toggle Help')
-                    ]
-                }),
                 markup('button', {
                     attrs: {
                         id: 'tryit-sling-clear-results',
@@ -320,39 +296,12 @@ class NavbarComponent {
                 }),
                 markup('button', {
                     attrs: {
-                        onclick: this.onDemo.bind(this),
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
-                    },
-                    children: [
-                        textNode('Demo')
-                    ]
-                }),
-                markup('button', {
-                    attrs: {
                         onclick: this.onFormat.bind(this),
                         style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
                     },
                     children: [
                         textNode('Format')
                     ]
-                }),
-                markup('label', {
-                    attrs: {
-                        id: 'try-sling-import-label',
-                        for: 'tryit-sling-import',
-                        style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); display: flex; align-items: center; ' + marginRight + '  ' + font + padding,
-                    },
-                    children: [
-                        textNode('Import File')
-                    ]
-                }),
-                markup('input', {
-                    attrs: {
-                        onchange: this.onImport.bind(this),
-                        id: 'tryit-sling-import',
-                        type: 'file',
-                        style: 'display: none;'
-                    }
                 }),
                 ...(sqliteReady ? [
                     markup('button', {
@@ -374,6 +323,83 @@ class NavbarComponent {
                         ]
                     })
                 ] : []),
+                ...(this.showMoreControls ? [
+                    markup('button', {
+                        attrs: {
+                            onclick: this.expandHeight.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Expand')
+                        ]
+                    }),
+                    ...(mod > 0 ? [
+                        markup('button', {
+                            attrs: {
+                                onclick: this.shrinkHeight.bind(this),
+                                style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                            },
+                            children: [
+                                textNode('Shrink')
+                            ]
+                        })
+                    ] : []),
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onHelpToggle.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Toggle Help')
+                        ]
+                    }),
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onDemo.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Demo')
+                        ]
+                    }),
+                    markup('label', {
+                        attrs: {
+                            id: 'try-sling-import-label',
+                            for: 'tryit-sling-import',
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); display: flex; align-items: center; ' + marginRight + '  ' + font + padding,
+                        },
+                        children: [
+                            textNode('Import File')
+                        ]
+                    }),
+                    markup('input', {
+                        attrs: {
+                            onchange: this.onImport.bind(this),
+                            id: 'tryit-sling-import',
+                            type: 'file',
+                            style: 'display: none;'
+                        }
+                    }),
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onToggleShowMore.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('Less')
+                        ]
+                    }),
+                ] : [
+                    markup('button', {
+                        attrs: {
+                            onclick: this.onToggleShowMore.bind(this),
+                            style: marginBottom + ' background-color: rgba(255,255,255,0.3); border: none; color: rgb(204, 204, 204); ' + marginRight + '  ' + font + padding
+                        },
+                        children: [
+                            textNode('More')
+                        ]
+                    }),
+                ]),
             ]
         });
     }
