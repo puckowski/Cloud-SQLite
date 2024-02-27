@@ -269,6 +269,10 @@ class PreviewComponent {
                 isBegin = false;
                 parts.splice(index, 1);
                 index--;
+            } else if (isBegin) {
+                parts[index - 1] += ';\n' + parts[index];
+                parts.splice(index, 1);
+                index--;
             }
         }
 
