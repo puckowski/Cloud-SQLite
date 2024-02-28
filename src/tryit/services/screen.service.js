@@ -5,7 +5,7 @@ class ScreenService {
     constructor() {
         this.COLLAPSED_MODE_WIDTH = 768;
         this.LOW_RESOLUTION_AREA = 1152000;
-        this.NORMAL_DPI_PRODUCT = 100;//9216;
+        this.NORMAL_DPI_PRODUCT = 9216;
         this.lastWindowWidth = null;
     }
 
