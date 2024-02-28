@@ -56,7 +56,7 @@ class PreviewComponent {
             if (htmlContainer.document.head) {
                 if ((data && data !== '') || this.resultHistory.length > 0) {
                     if (this.waterCss === null) {
-                        slGet('water.css').then(xhrResp => {
+                        slGet('mist.css').then(xhrResp => {
                             this.waterCss = xhrResp.response;
 
                             const style = document.createElement('style');
