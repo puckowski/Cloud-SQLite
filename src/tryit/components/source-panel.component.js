@@ -223,7 +223,7 @@ class SourcePanelComponent {
                 }),
                 markup('div', {
                     attrs: {
-                        style: 'width: 100%; background-color: rgb(0, 0, 0); border: none; color: rgb(204, 204, 204); flex: 19; white-space: pre; overflow: auto; padding: 0.25rem;' + font,
+                        style: 'background-color: rgb(0, 0, 0); border: none; color: rgb(204, 204, 204); flex: 19; white-space: pre; overflow: auto; padding: 0.25rem;' + font,
                         oninput: this.onInput.bind(this),
                         autocorrect: 'off',
                         autocomplete: 'off',
