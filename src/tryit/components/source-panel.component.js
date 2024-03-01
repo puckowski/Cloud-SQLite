@@ -50,6 +50,7 @@ class SourcePanelComponent {
 
                         const caretRestore = state.getCaretPositionToRestore();
                         this.setCurrentCursorPosition(caretRestore);
+                        detectChanges();
                     }, 100);
                 }
             }
@@ -141,13 +142,9 @@ class SourcePanelComponent {
             ).then((module) => {
                 this.hljs = module;
                 this.hljs.highlightElement(textAreaEle);
-
-                detectChanges();
             });
         } else {
             this.hljs.highlightElement(textAreaEle);
-
-            detectChanges();
         }
 
         const caretRestore = state.getCaretPositionToRestore();
@@ -155,6 +152,7 @@ class SourcePanelComponent {
 
         const sub = state.getHasHighlightedSubject();
         sub.next(true);
+        detectChanges();
     }
 
     onInput(event) {

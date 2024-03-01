@@ -46,7 +46,7 @@ class ScreenService {
         state.getDataSubject().next(true);
 
         setState(state);
-        //detectChanges();
+        detectChanges();
     }
 
     addResizeListener() {
