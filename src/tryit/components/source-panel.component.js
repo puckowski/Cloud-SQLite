@@ -50,7 +50,6 @@ class SourcePanelComponent {
 
                         const caretRestore = state.getCaretPositionToRestore();
                         this.setCurrentCursorPosition(caretRestore);
-                        //detectChanges();
                     }, 100);
                 }
             }
