@@ -23,36 +23,27 @@ class SourcePanelComponent {
                 sub.subscribe(this.debouncedFileChangeFunction);
             }
 
-            if (state.getPreserveFocus()) {
-                state.setPreserveFocus(false);
-                setState(state);
-            } else {
-                const textAreaEle = document.getElementById('tryit-sling-div');
+            const textAreaEle = document.getElementById('tryit-sling-div');
 
-                if (textAreaEle) {
-                    setTimeout(() => {
-                        state = getState();
+            if (textAreaEle) {
+                setTimeout(() => {
+                    state = getState();
 
-                        const collapsedMode = state.getCollapsedMode();
-                        const showPreview = state.getShowPreview();
+                    const collapsedMode = state.getCollapsedMode();
+                    const showPreview = state.getShowPreview();
 
-                        if (collapsedMode && showPreview) {
-                            return;
-                        }
+                    if (collapsedMode && showPreview) {
+                        return;
+                    }
 
-                        const fileIndex = state.getEditIndex();
-                        const fileData = this.fileService.getFileData(fileIndex);
+                    const fileIndex = state.getEditIndex();
+                    const fileData = this.fileService.getFileData(fileIndex);
 
-                        textAreaEle.focus();
-                        textAreaEle.textContent = fileData;
+                    textAreaEle.focus();
+                    textAreaEle.textContent = fileData;
 
-                        this.highlightCode();
-
-                        const caretRestore = state.getCaretPositionToRestore();
-                        this.setCurrentCursorPosition(caretRestore);
-                        detectChanges();
-                    }, 100);
-                }
+                    this.highlightCode();
+                }, 100);
             }
         };
         this.wordSuggestionComp = new WordSuggestionComponent();
@@ -142,9 +133,17 @@ class SourcePanelComponent {
             ).then((module) => {
                 this.hljs = module;
                 this.hljs.highlightElement(textAreaEle);
+
+                const caretRestore = state.getCaretPositionToRestore();
+                this.setCurrentCursorPosition(caretRestore);
+                detectChanges();
             });
         } else {
             this.hljs.highlightElement(textAreaEle);
+
+            const caretRestore = state.getCaretPositionToRestore();
+            this.setCurrentCursorPosition(caretRestore);
+            detectChanges();
         }
 
         const caretRestore = state.getCaretPositionToRestore();

@@ -10,12 +10,11 @@ class StoreGlobal {
         this.inlineHeight = '';
         this.collapsedMode = false;
         this.showPreview = false;
-        this.version = '1.3';
+        this.version = '1.4';
         this.showHelp = false;
         this.sourceHasNewInput = BehaviorSubject(false);
         this.hasHighlighted = BehaviorSubject(false);
         this.caretPositionToRestore = 0;
-        this.preserveFocus = false;
         this.portraitMode = false;
         this.lowResolution = false;
         this.manualLowResolution = null;
@@ -77,14 +76,6 @@ class StoreGlobal {
 
     getHasHighlightedSubject() {
         return this.hasHighlighted;
-    }
-
-    setPreserveFocus(preserveState) {
-        this.preserveFocus = preserveState;
-    }
-
-    getPreserveFocus() {
-        return this.preserveFocus;
     }
 
     getCaretPositionToRestore() {
