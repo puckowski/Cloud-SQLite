@@ -10,7 +10,7 @@ class StoreGlobal {
         this.inlineHeight = '';
         this.collapsedMode = false;
         this.showPreview = false;
-        this.version = '1.4';
+        this.version = '1.5';
         this.showHelp = false;
         this.sourceHasNewInput = BehaviorSubject(false);
         this.hasHighlighted = BehaviorSubject(false);
@@ -22,9 +22,14 @@ class StoreGlobal {
         this.dismissSuggestionSubject = BehaviorSubject(false);
         this.lowResolutionObject = 'lowresolution';
         this.initializeLowResolution();
+        this.caretSubject = BehaviorSubject(false);
         this.exportSqlSubject = BehaviorSubject(false);
         this.sqliteReadySubject = BehaviorSubject(false);
         this.clearResultsSubject = BehaviorSubject(false);
+    }
+
+    getCaretSubject() {
+        return this.caretSubject;
     }
 
     getClearResultsSubject() {

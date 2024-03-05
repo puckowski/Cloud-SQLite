@@ -1,5 +1,6 @@
 import { detectChanges, getState, markup, setState, textNode } from '../../../dist/sling.min';
 import FileService from '../services/file.service';
+import { getCaretPosition } from '../services/caret.service';
 
 class NavbarComponent {
 
@@ -178,6 +179,8 @@ class NavbarComponent {
 
                 const sub = state.getDataSubject();
                 sub.next(true);
+
+                this.restoreCaretPosition();
             });
         } else {
             code = this.sqlFormatter(code, { language: 'sqlite' });
@@ -186,7 +189,23 @@ class NavbarComponent {
 
             const sub = state.getDataSubject();
             sub.next(true);
+
+            this.restoreCaretPosition();
         }
+    }
+
+    restoreCaretPosition() {
+        const state = getState();
+
+        const textAreaEle = document.getElementById('tryit-sling-div');
+        const caretRestore = getCaretPosition(textAreaEle);
+
+        state.setCaretPositionToRestore(caretRestore);
+        setState(state);
+
+        state.getCaretSubject().next(caretRestore);
+
+        detectChanges();
     }
 
     onToggleShowMore() {

@@ -57,6 +57,24 @@ class SourcePanelComponent {
             sub.subscribe(this.debouncedFileChangeFunction);
             sub.next(true);
         }
+
+        const caretSubject = state.getCaretSubject();
+        if (!caretSubject.getHasSubscription(this.setCurrentCursorPosition)) {
+            caretSubject.subscribe(this.setCurrentCursorPosition);
+        }
+    }
+
+    slOnDestroy() {
+        const state = getState();
+        const sub = state.getDataSubject();
+        if (sub.getHasSubscription(this.debouncedFileChangeFunction)) {
+            sub.clearSubscription(this.debouncedFileChangeFunction);
+        }
+
+        const caretSubject = state.getCaretSubject();
+        if (caretSubject.getHasSubscription(this.setCurrentCursorPosition)) {
+            caretSubject.clearSubscription(this.setCurrentCursorPosition);
+        }
     }
 
     setCurrentCursorPosition(charOffset) {
