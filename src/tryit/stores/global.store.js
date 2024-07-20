@@ -10,7 +10,7 @@ class StoreGlobal {
         this.inlineHeight = '';
         this.collapsedMode = false;
         this.showPreview = false;
-        this.version = '1.5';
+        this.version = '1.6';
         this.showHelp = false;
         this.sourceHasNewInput = BehaviorSubject(false);
         this.hasHighlighted = BehaviorSubject(false);

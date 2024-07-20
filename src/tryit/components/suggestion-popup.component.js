@@ -558,7 +558,7 @@ export class WordSuggestionComponent {
 
             if (textAreaEle && this.newInput) {
                 const selectionEnd = getCaretPosition(textAreaEle);
-                if (textAreaEle && selectionEnd >= 16) {
+                if (textAreaEle) {
                     this.selectionText = textAreaEle.textContent.slice(selectionEnd - 16, selectionEnd);
                     this.occurrence = this.countOccurrences(textAreaEle.textContent, this.selectionText);
 
@@ -603,8 +603,8 @@ export class WordSuggestionComponent {
 
                         this.determineSuggestionIfPossible(fileData, index, textAreaEle);
                     } else {
-                        this.suggestion = null;
-                        detectChanges();
+                        this.input = after;
+                        this.determineSuggestionIfPossible(fileData, index, textAreaEle);
                     }
                 }
 
@@ -894,7 +894,8 @@ export class WordSuggestionComponent {
             attrs: {
                 id: 'tryit-sling-suggestion',
                 style: leftAndTopAndDisplay + 'position: fixed; padding: 0.25rem; background-color: rgb(60, 68, 83); color: rgb(204, 204, 204); z-index: 1000;' + font,
-                onclick: this.insertSuggestion.bind(this)
+                onclick: this.insertSuggestion.bind(this),
+                onmousedown: (pointerEvent) => { pointerEvent.preventDefault(); pointerEvent.stopPropagation(); }
             },
             children: [
                 textNode(this.suggestion)
